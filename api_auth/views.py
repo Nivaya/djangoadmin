@@ -15,6 +15,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -31,11 +34,11 @@ class LoginView(APIView):
             'user': str(request.user),  # `django.contrib.auth.User` instance.
             'auth': str(request.auth),  # None
         }
-        return Response(content, status=status.HTTP_202_ACCEPTED)
+        return Response(content, status=status.HTTP_200_OK)
 
 
 class LoginOutView(APIView):
 
     def post(self, request, format=None):
         logout(request)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_200_OK)
