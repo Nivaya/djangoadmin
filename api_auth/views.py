@@ -24,21 +24,24 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class LoginView(APIView):
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=self.request.data,
                                      context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
         content = {
-            'user': str(request.user),  # `django.contrib.auth.User` instance.
-            'auth': str(request.auth),  # None
+            'errcode': 0,
+            'errmsg': None,
+            'data': {
+                'user': str(request.user),
+            }
         }
         return Response(content, status=status.HTTP_200_OK)
 
 
 class LoginOutView(APIView):
 
-    def post(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         logout(request)
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
