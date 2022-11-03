@@ -1,15 +1,21 @@
 from django.urls import path, include
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
 from rest_framework import routers, serializers, viewsets
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        fields = ('username', 'email', "first_name", "last_name")
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ("name",)
 
 
 class LoginSerializer(serializers.Serializer):
